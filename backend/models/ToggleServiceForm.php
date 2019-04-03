@@ -6,6 +6,9 @@ use yii\base\Model;
 
 class ToggleServiceForm extends Model
 {
+    /**
+     * @var Service
+     */
     public $service;
 
     public $statusId;
@@ -24,6 +27,8 @@ class ToggleServiceForm extends Model
             return false;
         }
 
-        return true;
+        $this->service->status_id = $this->statusId;
+
+        return $this->service->save();
     }
 }

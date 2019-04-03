@@ -10,7 +10,6 @@ abstract class ServiceForm extends Model
     public $code;
     public $price;
     public $description;
-    public $statusId = Service::STATUS_ON;
     public $name;
     public $cityId;
     public $activeTo;
@@ -24,9 +23,8 @@ abstract class ServiceForm extends Model
             [['code', 'name', 'cityId'], 'required'],
             [['price'], 'number'],
             [['description'], 'string'],
-            [['statusId', 'cityId'], 'integer'],
+            [['cityId'], 'integer'],
             [['activeTo'], 'date', 'format' => 'php:Y-m-d'],
-            [['statusId'], 'in', 'range' => array_keys($this->getStatusList())],
             [['name', 'code'], 'string', 'max' => 255],
             [['cityId'], 'exist', 'targetClass' => City::class, 'targetAttribute' => ['cityId' => 'id']],
         ];
@@ -36,7 +34,6 @@ abstract class ServiceForm extends Model
     {
         return [
             'cityId' => 'City',
-            'statusId' => 'Status',
         ];
     }
 
@@ -46,13 +43,5 @@ abstract class ServiceForm extends Model
             ->select(['name', 'id'])
             ->indexBy('id')
             ->column();
-    }
-
-    public function getStatusList()
-    {
-        return [
-            Service::STATUS_OFF => 'Off',
-            Service::STATUS_ON => 'On',
-        ];
     }
 }

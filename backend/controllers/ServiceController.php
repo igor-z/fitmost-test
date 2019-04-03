@@ -53,7 +53,7 @@ class ServiceController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete, toggle' => ['POST'],
                 ],
             ],
         ];
@@ -116,21 +116,22 @@ class ServiceController extends Controller
     /**
      * Creates a new Service model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
      * @return mixed
      */
-    public function actionToggle()
+    public function actionToggle($id)
     {
         $model = new ToggleServiceForm();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->toggle()) {
-                $errors = [];
-                foreach ($model->getErrors() as $error) {
-                    $errors[] = $error;
-                }
-
-                Yii::$app->session->setFlash('error', implode("\n", $errors));
+        $model->service = $this->findModel($id);
+        $model->statusId = Yii::$app->request->post('statusId');
+        if (!$model->toggle()) {
+            $errors = [];
+            foreach ($model->getErrors() as $error) {
+                $errors[] = $error;
             }
+
+            Yii::$app->session->setFlash('error', implode("\n", $errors));
         }
 
         return $this->redirect(['index']);

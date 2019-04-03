@@ -63,8 +63,8 @@ class m190402_225818_init_rbac extends Migration
             ->from('{{%user}}')
             ->where(['username' => 'operator'])
             ->scalar();
-        
-        $authManager->assign($admin, $operatorUserId);
+
+        $authManager->assign($operator, $operatorUserId);
     }
 
     /**

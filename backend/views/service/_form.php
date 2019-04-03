@@ -21,10 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-	<?php if (Yii::$app->can('toggleService')):?>
-	    <?= $form->field($model, 'statusId')->dropDownList($model->getStatusList()) ?>
-	<?php endif?>
-
     <?= $form->field($model, 'activeTo')->widget(DatePicker::class, [
         'model' => $model,
 	    'attribute' => 'activeTo',

@@ -42,7 +42,6 @@ class UpdateServiceForm extends ServiceForm
         $this->price = $service->price;
         $this->cityId = $service->city_id;
         $this->activeTo = Yii::$app->formatter->asDate($service->active_to, 'php:Y-m-d');
-        $this->statusId = $service->status_id;
         $this->code = $service->code;
     }
 
@@ -66,7 +65,6 @@ class UpdateServiceForm extends ServiceForm
         $service->price = $this->price;
         $service->city_id = $this->cityId;
         $service->active_to = \strtotime($this->activeTo);
-        $service->status_id = $this->statusId;
         $service->code = $this->code;
         $service->save();
 

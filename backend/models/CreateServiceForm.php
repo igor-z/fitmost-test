@@ -26,7 +26,7 @@ class CreateServiceForm extends ServiceForm
         $service->price = $this->price;
         $service->city_id = $this->cityId;
         $service->active_to = \strtotime($this->activeTo);
-        $service->status_id = $this->statusId;
+        $service->status_id = Service::STATUS_ON;
         $service->code = $this->code;
         $service->save();
 

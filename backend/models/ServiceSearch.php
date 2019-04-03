@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\City;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Service;
@@ -71,5 +72,21 @@ class ServiceSearch extends Service
             ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
+    }
+
+    public function getCityList()
+    {
+        return City::find()
+            ->select(['name', 'id'])
+            ->indexBy('id')
+            ->column();
+    }
+
+    public function getStatusList()
+    {
+        return [
+            Service::STATUS_OFF => 'Off',
+            Service::STATUS_ON => 'On',
+        ];
     }
 }

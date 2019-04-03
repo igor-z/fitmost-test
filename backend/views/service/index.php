@@ -1,5 +1,6 @@
 <?php
 
+use common\models\City;
 use common\models\Service;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -32,19 +33,40 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'price',
             'description:ntext',
-            //'status_id',
-            //'active_to',
-            //'city_id',
+            [
+                'attribute' => 'status_id',
+	            'filter' => $searchModel->getStatusList(),
+	            'value' => function ($model) {
+					return $model->status_id === Service::STATUS_ON ? 'On' : 'Off';
+	            },
+			],
+            'active_to:date',
+	        [
+				'attribute' => 'city_id',
+		        'filter' => $searchModel->getCityList(),
+		        'value' => 'city.name',
+			],
 
             [
                 'class' => 'yii\grid\ActionColumn',
 	            'template' => '{view}&nbsp;{update}&nbsp;{delete}&nbsp;{toggle}',
 	            'buttons' => [
                     'toggle' => function ($url, $model, $key) {
-						$newStatusId = $model->status_id == Service::STATUS_ON ? Service::STATUS_OFF : Service::STATUS_ON;
+						if ($model->status_id === Service::STATUS_ON) {
+							$newStatusId = Service::STATUS_OFF;
+							$label = 'Turn off';
+						} else {
+							$newStatusId = Service::STATUS_ON;
+							$label = 'Turn on';
+						}
 
-						return Html::a('Toggle', ['service/toggle', 'statusId' => $newStatusId], [
-							'data-method' => 'post',
+						return Html::a($label, ['service/toggle', 'id' => $model->id], [
+							'data' => [
+								'method' => 'post',
+								'params' => [
+                                    'statusId' => $newStatusId,
+								],
+							],
 						]);
                     },
 	            ],
