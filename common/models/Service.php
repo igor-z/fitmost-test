@@ -71,4 +71,19 @@ class Service extends \yii\db\ActiveRecord
     {
         return $this->hasOne(City::class, ['id' => 'city_id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $userIdentity = Yii::$app->user;
+
+        $serviceLogItem = new ServiceLogItem();
+        $serviceLogItem->service_id = $this->id;
+        $serviceLogItem->author_id = $userIdentity ? $userIdentity->getId() : null;
+        foreach ($changedAttributes as $attribute => $value) {
+            $serviceLogItem->setAttribute('service_'.$attribute, $value);
+        }
+        $serviceLogItem->save();
+
+        parent::afterSave($insert, $changedAttributes);
+    }
 }
