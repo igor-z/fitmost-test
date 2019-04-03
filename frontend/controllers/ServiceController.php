@@ -3,9 +3,9 @@ namespace frontend\controllers;
 
 use frontend\models\Service;
 use yii\base\DynamicModel;
-use yii\data\ActiveDataProvider;
 use yii\data\DataFilter;
 use yii\rest\ActiveController;
+use yii\rest\IndexAction;
 
 class ServiceController extends ActiveController
 {
@@ -25,7 +25,7 @@ class ServiceController extends ActiveController
             ->addRule(['city_id', 'id'], 'integer');
 
         $actions['index'] = [
-            'class' => 'yii\rest\IndexAction',
+            'class' => IndexAction::class,
             'modelClass' => $this->modelClass,
             'checkAccess' => [$this, 'checkAccess'],
             'dataFilter' => [
