@@ -16,7 +16,7 @@
 
 `sudo docker exec -it fitmost-test_frontend_1 /bin/bash`
 
-В контейнере:
+Ждем поднятия mysql, после чего в контейнере:
 
 `./init --env=Development`
 
