@@ -36,16 +36,6 @@ class ServiceLogSearch extends ServiceLogItem
         ];
     }
 
-    public function attributeLabels()
-    {
-        return [
-            'service_status_id' => 'Service Status',
-            'author_id' => 'Author',
-            'service_id' => 'Service',
-            'service_city_id' => 'Service City',
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */

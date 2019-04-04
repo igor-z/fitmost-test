@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\AttributeTypecastBehavior;
 
 /**
  * This is the model class for table "{{%service}}".
@@ -64,6 +65,18 @@ class Service extends \yii\db\ActiveRecord
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            'typecast' => [
+                'class' => AttributeTypecastBehavior::class,
+                'attributeTypes' => [
+                    'city_id' => 'integer',
+                ],
+            ]
+        ];
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -74,15 +87,17 @@ class Service extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        $userIdentity = Yii::$app->user;
+        if (!$insert) {
+            $userIdentity = Yii::$app->user;
 
-        $serviceLogItem = new ServiceLogItem();
-        $serviceLogItem->service_id = $this->id;
-        $serviceLogItem->author_id = $userIdentity ? $userIdentity->getId() : null;
-        foreach ($changedAttributes as $attribute => $value) {
-            $serviceLogItem->setAttribute('service_'.$attribute, $value);
+            $serviceLogItem = new ServiceLogItem();
+            $serviceLogItem->service_id = $this->id;
+            $serviceLogItem->author_id = $userIdentity ? $userIdentity->getId() : null;
+            foreach ($changedAttributes as $attribute => $value) {
+                $serviceLogItem->setAttribute('service_'.$attribute, $value);
+            }
+            $serviceLogItem->save();
         }
-        $serviceLogItem->save();
 
         parent::afterSave($insert, $changedAttributes);
     }

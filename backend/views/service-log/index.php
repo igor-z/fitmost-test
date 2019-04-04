@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Service;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -11,14 +12,7 @@ $this->title = 'Service Log Items';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="service-log-item-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Service Log Item', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -42,8 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'service_price',
             [
                 'attribute' => 'service_status_id',
-                'value' => 'service.name',
-                'filter' => $searchModel->getServiceList(),
+                'value' => function ($model) {
+    	            return $model->service_status_id === Service::STATUS_ON ? 'On' : 'Off';
+                },
+                'filter' => $searchModel->getServiceStatusList(),
             ],
             'service_active_to:date',
             [
@@ -54,6 +50,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:date',
         ],
     ]); ?>
-
-
 </div>
